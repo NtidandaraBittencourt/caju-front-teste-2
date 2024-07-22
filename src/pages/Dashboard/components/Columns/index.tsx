@@ -1,6 +1,7 @@
 
 import * as S from "./styles";
 import RegistrationCard from "../RegistrationCard";
+import { IRegistrations } from "~/interfaces/IFormRegistration";
 
 const allColumns = [
   { status: 'REVIEW', title: "Pronto para revisar" },
@@ -9,9 +10,10 @@ const allColumns = [
 ];
 
 type Props = {
-  registrations?: any[];
+  registrations?: IRegistrations;
 };
 const Collumns = (props: Props) => {
+
   return (
     <S.Container>
       {allColumns.map((collum) => {

@@ -1,10 +1,10 @@
 import { useQuery } from "@tanstack/react-query"
-import axios, { AxiosPromise } from "axios";
+import axios from "axios";
 import { IRegistrations } from "~/interfaces";
 
 const baseURL = 'http://localhost:3000'
 
-const fetchData = async(): AxiosPromise<IRegistrations> =>{
+const fetchData = async(): Promise<IRegistrations> =>{
     const response = await axios.get<IRegistrations>(baseURL + '/registrations');
     return response
 } 
@@ -12,7 +12,8 @@ const fetchData = async(): AxiosPromise<IRegistrations> =>{
 export function useFetch() {
     const query = useQuery({
         queryFn: fetchData,
-        queryKey: ['registrations-data']
+        queryKey: ['registrations-data'],
+        enabled: false
     })
     return {
         ...query,

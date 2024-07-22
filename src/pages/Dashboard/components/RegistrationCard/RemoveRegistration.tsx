@@ -4,10 +4,13 @@ import GenericModal from "~/components/GenericModal";
 import * as S from "./styles";
 import { useDeleteMutate } from "~/hooks/useDeleteMutate";
 import { useEffect, useState } from "react";
+import { Loading } from "~/components/Loading";
+import { useFetch } from "~/hooks/useFetch";
 
-const  removeRegistration = ({registration}: string) => {
+const  RemoveRegistration = ({registration}: string) => {
     const [openModal, setOpenModal] = useState(false);
     const [infoAlert, setInfoAlert] = useState({})
+    const [pedding, setPending] = useState(false);
 
     const handleOpenModal = () => {
         setOpenModal(true);
@@ -22,31 +25,44 @@ const  removeRegistration = ({registration}: string) => {
     }
 
     const { mutate, isSuccess, isError } = useDeleteMutate()
+    const { refetch, isLoading } = useFetch();
 
     const handleDeleteCard = () => {
-        console.log('delete', registration)
-
         mutate(registration)
+        handleCloseModal()
     }
 
-    useEffect(() =>{
-        handleCloseModal()
-        setInfoAlert({
-            status: 'success',
-            description: 'Alteração realizada com sucesso'
-        })
-    },[isSuccess])
+    useEffect(() => {
+        if (isSuccess) {
+            setInfoAlert({
+                status: 'success',
+                description: 'Registro excluido com sucesso!'
+            });
+        } else if (isError) {
+            setInfoAlert({
+                status: 'error',
+                description: 'Não foi possível excluir registro.'
+            });
+        }
+    }, [isSuccess, isError]);
 
     useEffect(() => {
-        handleCloseModal()
-        setInfoAlert({
-            status: 'error',
-            description: 'Não foi possivel realizar alteração, tente novamente'
-        })
-    },[isError])
+        if (infoAlert) {
+            handleRefetch()
+        }
+    }, [infoAlert]);
+
+    const handleRefetch = () => {
+        setPending(true);
+        setTimeout(() => {
+            refetch(); 
+            setPending(false);
+        }, 2000); 
+    };
 
     return (
             <>
+                {isLoading && <Loading />}
                 <HiOutlineTrash onClick={removeCard}/>
             
                 <GenericModal open={openModal} onClose={handleCloseModal}>
@@ -73,4 +89,4 @@ const  removeRegistration = ({registration}: string) => {
     }
 
     
-    export default removeRegistration
+    export default RemoveRegistration

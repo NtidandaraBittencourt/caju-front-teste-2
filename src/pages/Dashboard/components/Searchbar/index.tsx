@@ -9,7 +9,7 @@ import { Loading } from "~/components/Loading";
 import { useFetch } from "~/hooks/useFetch";
 import { useFormContext, Controller } from "react-hook-form";
 import InputMask from 'react-input-mask'
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import axios from "axios";
 import { useQuery } from "@tanstack/react-query";
 import { useRegistration } from "~/hooks/useRegistration";
@@ -36,8 +36,12 @@ export const SearchBar = () => {
       // const {data} = useRegistration(searchCpf)
       // console.log('retorno:', data)
     }
-
   }
+
+  useEffect(() => {
+    console.log('loading', isLoading)
+    refetch()
+}, []);
   
   return (
     <S.Container>

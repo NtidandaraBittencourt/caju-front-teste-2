@@ -1,43 +1,76 @@
 import { useEffect, useState } from "react";
-
 import { ButtonSmall } from "~/components/Buttons";
 import * as S from "./styles";
 import { Alert, Button, Typography } from "@mui/material";
 import GenericModal from "~/components/GenericModal";
-
 import { IFormRegistration } from "~/interfaces";
 import { useUpdateMutate } from "~/hooks/useUpdateMutate";
+import { Loading } from "~/components/Loading";
+import { useFetch } from "~/hooks/useFetch";
 
-const  ActionRegistration = (props: IFormRegistration) => {
-    const [registration, setRegistration] = useState(props.data)
+const ActionRegistration = (props: IFormRegistration) => {
+    const [registration, setRegistration] = useState(props.data);
     const [openModal, setOpenModal] = useState(false);
-
     const [infoModal, setInfoModal] = useState({});
-    const [infoAlert, setInfoAlert] = useState({})
+    const [infoAlert, setInfoAlert] = useState(null);
+    const [isReview, setIsReview] = useState(false);
+    const [pedding, setPending] = useState(false);
 
-    const [isReview, setIsReview] = useState(false)
+    const { mutate, isSuccess, isError, isPending } = useUpdateMutate();
 
+    const { refetch, isLoading } = useFetch();
+
+    useEffect(() => {
+        setIsReview(props.data.status === "REVIEW");
+    }, [props.data.status]);
+
+    useEffect(() => {
+        if (isSuccess) {
+            setInfoAlert({
+                status: 'success',
+                description: 'Alteração realizada com sucesso'
+            });
+        } else if (isError) {
+            setInfoAlert({
+                status: 'error',
+                description: 'Não foi possível realizar a alteração, tente novamente'
+            });
+        }
+    }, [isSuccess, isError]);
+
+    useEffect(() => {
+        if (infoAlert) {
+            handleRefetch()
+        }
+    }, [infoAlert]);
+
+    const handleRefetch = () => {
+        setPending(true);
+        setTimeout(() => {
+            refetch(); 
+            setPending(false);
+        }, 2000); 
+    };
 
     const handleOpenModal = () => {
         setOpenModal(true);
     };
-    
+
     const handleCloseModal = () => {
         setOpenModal(false);
     };
 
-    useEffect(() => {
-        function verifyStatus() {
-          if (props.data.status === "REVIEW") {
-            setIsReview(true);
-          } else {
-            setIsReview(false);
-          }
-        }
-    
-        verifyStatus();
-    
-      }, [props.data]);
+    const handleActionCard = () => {
+        setRegistration(prevRegistration => {
+            const updatedRegistration = {
+                ...prevRegistration,
+                status: infoModal.status
+            };
+            mutate(updatedRegistration);
+            return updatedRegistration;
+        });
+        handleCloseModal();
+    };
 
     const reprovedCard = () => {
         setInfoModal({
@@ -45,9 +78,9 @@ const  ActionRegistration = (props: IFormRegistration) => {
             description: "Tem certeza que deseja reprovar o usuário?",
             button: "Reprovar",
             status: 'REPROVED'
-        })
-        handleOpenModal()
-    }
+        });
+        handleOpenModal();
+    };
 
     const reviewCard = () => {
         setInfoModal({
@@ -55,52 +88,39 @@ const  ActionRegistration = (props: IFormRegistration) => {
             description: "Tem certeza que deseja revisar esse usuário?",
             button: "Revisar novamente",
             status: "REVIEW"
-        })
-        handleOpenModal()
-    }
+        });
+        handleOpenModal();
+    };
 
-    const approvedCard = () => {       
+    const approvedCard = () => {
         setInfoModal({
             title: "Aprovar usuário",
             description: "Tem certeza que deseja aprovar o usuário?",
             button: "Aprovar",
             status: "APPROVED"
-        })
-        handleOpenModal()
-    }
-
-    const {mutate, isSuccess, isError} = useUpdateMutate()
-
-    const handlActionCard = () => {
-        setRegistration({
-            ...registration,
-            status: infoModal.status
-        })
-        mutate(registration)
-    }
-
-    useEffect(() =>{
-        handleCloseModal()
-        setInfoAlert({
-            status: 'success',
-            description: 'Alteração realizada com sucesso'
-        })
-    },[isSuccess])
-
-    useEffect(() => {
-        handleCloseModal()
-        setInfoAlert({
-            status: 'error',
-            description: 'Não foi possivel realizar alteração, tente novamente'
-        })
-    },[isError])
+        });
+        handleOpenModal();
+    };
 
     return (
         <>
-           {isReview && ( <ButtonSmall bgcolor="rgb(255, 145, 154)" onClick={() => reprovedCard()}>Reprovar</ButtonSmall>) }
-           {isReview && ( <ButtonSmall bgcolor="rgb(155, 229, 155)" onClick={() => approvedCard()}>Aprovar</ButtonSmall>) }
-           {!isReview && (<ButtonSmall bgcolor="#ff8858" onClick={() => reviewCard()}>Revisar novamente</ButtonSmall>)}
-        
+            {isPending || isLoading ? <Loading /> : null}
+            {isReview && (
+                <ButtonSmall bgcolor="rgb(255, 145, 154)" onClick={reprovedCard}>
+                    Reprovar
+                </ButtonSmall>
+            )}
+            {isReview && (
+                <ButtonSmall bgcolor="rgb(155, 229, 155)" onClick={approvedCard}>
+                    Aprovar
+                </ButtonSmall>
+            )}
+            {!isReview && (
+                <ButtonSmall bgcolor="#ff8858" onClick={reviewCard}>
+                    Revisar novamente
+                </ButtonSmall>
+            )}
+
             <GenericModal open={openModal} onClose={handleCloseModal}>
                 <Typography variant="h6" mb={2}>{infoModal.title}</Typography>
                 <Typography variant="body1">{infoModal.description}</Typography>
@@ -108,20 +128,19 @@ const  ActionRegistration = (props: IFormRegistration) => {
                     <Button variant="text" onClick={handleCloseModal}>
                         Fechar
                     </Button>
-                    <Button variant="contained" onClick={handlActionCard}>
+                    <Button variant="contained" onClick={handleActionCard}>
                         {infoModal.button}
                     </Button>
                 </S.ButtonsActions>
             </GenericModal>
 
-            {isError ||isSuccess ? (
-                <Alert severity={infoAlert.status} sx={{position: 'absolute', top: '90%'}}>
+            {infoAlert && (
+                <Alert severity={infoAlert.status} sx={{ position: 'absolute', top: '90%' }}>
                     <Typography variant="body1">{infoAlert.description}</Typography>
                 </Alert>
-            ): null}
-    </>
-    
-        )
-}
+            )}
+        </>
+    );
+};
 
-export default ActionRegistration
+export default ActionRegistration;

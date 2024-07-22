@@ -7,13 +7,18 @@ import { Loading } from "~/components/Loading";
 import { CardReload } from "~/components/Erros/CardReload";
 import { useForm, FormProvider } from 'react-hook-form';
 import { registrationValidations } from "~/utils";
+import { useEffect } from "react";
 
 const DashboardPage = () => {
 
-  const { data, isError, isLoading } = useFetch();
+  const { data, isError, isLoading, refetch } = useFetch();
   const methods = useForm({
     resolver: registrationValidations
   })
+
+  useEffect(() => {
+    refetch()
+}, []);
   
   return (
     <S.Container>
