@@ -12,19 +12,32 @@
     "preview": "vite preview"
   },
   "dependencies": {
+    "@emotion/react": "^11.13.0",
+    "@emotion/styled": "^11.13.0",
+    "@hookform/resolvers": "^3.9.0",
+    "@mui/material": "^5.16.4",
+    "@tanstack/react-query": "^5.51.9",
     "axios": "^1.7.2",
     "json-server": "^1.0.0-beta.1",
     "react": "^18.2.0",
+    "react-datepicker": "^7.3.0",
     "react-dom": "^18.2.0",
+    "react-hook-form": "^7.52.1",
     "react-icons": "^5.2.1",
+    "react-input-mask": "^2.0.4",
+    "react-number-format": "^5.4.0",
     "react-router-dom": "5.1.2",
-    "styled-components": "^6.1.11"
+    "react-text-mask": "^5.5.0",
+    "styled-components": "^6.1.11",
+    "yup": "^1.4.0"
   },
   "devDependencies": {
     "@nabla/vite-plugin-eslint": "^2.0.4",
+    "@tanstack/eslint-plugin-query": "^5.51.10",
     "@testing-library/jest-dom": "^6.4.6",
     "@testing-library/react": "13.0.0",
-    "@types/react": "^18.2.66",
+    "@types/react": "^18.3.3",
+    "@types/react-datepicker": "^7.0.0",
     "@types/react-dom": "^18.2.22",
     "@types/react-router-dom": "^5.3.3",
     "@typescript-eslint/eslint-plugin": "^7.2.0",
@@ -41,7 +54,7 @@
     "jest-environment-jsdom": "29.7.0",
     "ts-jest": "29.1.2",
     "ts-node": "10.9.2",
-    "typescript": "^5.2.2",
-    "vite": "^5.2.0"
+    "typescript": "^5.5.3",
+    "vite": "^5.3.4"
   }
 }

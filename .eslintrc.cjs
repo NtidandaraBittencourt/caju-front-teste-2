@@ -29,4 +29,7 @@ module.exports = {
     "import/named": "off",
     "react-hooks/exhaustive-deps": "warn"
   },
+  parserOptions: {
+    project: ['./tsconfig.json', './tsconfig.node.json']
+  }
 };

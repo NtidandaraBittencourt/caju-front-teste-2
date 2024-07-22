@@ -22,14 +22,16 @@ const Collumns = (props: Props) => {
                 {collum.title}
               </S.TitleColumn>
               <S.CollumContent>
-                {props?.registrations?.map((registration) => {
-                  return (
-                    <RegistrationCard
-                      data={registration}
-                      key={registration.id}
-                    />
-                  );
-                })}
+                {props?.registrations?.filter(registration => registration.status === collum.status)
+                  .map((filteredRegistration ) => {
+                    return (
+                      <RegistrationCard
+                        data={filteredRegistration }
+                        key={filteredRegistration .id}
+                      />
+                    );                 
+                  }
+                )}
               </S.CollumContent>
             </>
           </S.Column>

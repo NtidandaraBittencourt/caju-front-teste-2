@@ -1,37 +1,38 @@
-import { ButtonSmall } from "~/components/Buttons";
 import * as S from "./styles";
 import {
   HiOutlineMail,
   HiOutlineUser,
-  HiOutlineCalendar,
-  HiOutlineTrash,
+  HiOutlineCalendar
 } from "react-icons/hi";
 
+import ActionRegistration from "./ActionsRegistration";
+import RemoveRegistration from "./RemoveRegistration";
+import { IFormRegistration } from "~/interfaces";
+
 type Props = {
-  data: any;
+  data: IFormRegistration;
 };
 
 const RegistrationCard = (props: Props) => {
+  const {employeeName, email, admissionDate } = props.data
+  
   return (
     <S.Card>
       <S.IconAndText>
         <HiOutlineUser />
-        <h3>{props.data.employeeName}</h3>
+        <h3>{employeeName}</h3>
       </S.IconAndText>
       <S.IconAndText>
         <HiOutlineMail />
-        <p>{props.data.email}</p>
+        <p>{email}</p>
       </S.IconAndText>
       <S.IconAndText>
         <HiOutlineCalendar />
-        <span>{props.data.admissionDate}</span>
+        <span>{admissionDate}</span>
       </S.IconAndText>
       <S.Actions>
-        <ButtonSmall bgcolor="rgb(255, 145, 154)" >Reprovar</ButtonSmall>
-        <ButtonSmall bgcolor="rgb(155, 229, 155)">Aprovar</ButtonSmall>
-        <ButtonSmall bgcolor="#ff8858">Revisar novamente</ButtonSmall>
-
-        <HiOutlineTrash />
+        <ActionRegistration data={props.data}/>
+        <RemoveRegistration registration={props.data.id}/>       
       </S.Actions>
     </S.Card>
   );

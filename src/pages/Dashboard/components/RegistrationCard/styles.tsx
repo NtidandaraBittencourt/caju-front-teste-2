@@ -33,3 +33,14 @@ export const Actions = styled.div`
     cursor: pointer;
   }
 `;
+
+export const ButtonsActions = styled.div`
+  margin-top: 2rem;
+  display: flex;
+  justify-content: end;
+  align-items: center;
+  gap: 4px;
+  svg {
+    cursor: pointer;
+  }
+`;
