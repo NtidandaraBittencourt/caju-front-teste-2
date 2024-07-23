@@ -7,9 +7,11 @@ import { Loading } from "~/components/Loading";
 import { CardReload } from "~/components/Erros/CardReload";
 import { useForm, FormProvider } from 'react-hook-form';
 import { registrationValidations } from "~/utils";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 
 const DashboardPage = () => {
+  const [searchCpf, setSearchCpf] = useState("");
+  const [searchData, setSearchData] = useState(null);
 
   const { data, isError, isLoading, refetch } = useFetch();
   const methods = useForm({
@@ -17,8 +19,22 @@ const DashboardPage = () => {
   })
 
   useEffect(() => {
-    refetch()
-}, []);
+    if (!searchCpf) {
+      refetch();
+    }
+  }, [refetch, searchCpf]);
+
+const handleSearch = (cpf, data) => {
+  setSearchCpf(cpf);
+  setSearchData(data);
+};
+
+const handleRefresh = () => {
+  setSearchCpf("");
+  setSearchData(null);
+  refetch();
+  methods.reset();
+};
   
   return (
     <S.Container>
@@ -27,9 +43,9 @@ const DashboardPage = () => {
       {!isLoading && data &&
         <div>
           <FormProvider {...methods}>
-            <SearchBar />
+            <SearchBar onSearch={handleSearch} onRefresh={handleRefresh} />
           </FormProvider>
-          <Collumns registrations={data} />
+          <Collumns registrations={searchData || data} />
         </div>
       }
 

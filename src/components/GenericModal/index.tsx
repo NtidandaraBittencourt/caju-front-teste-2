@@ -39,3 +39,4 @@ const GenericModal: React.FC<ModalProps> = ({ open, onClose, children }) => {
 };
 
 export default GenericModal;
+

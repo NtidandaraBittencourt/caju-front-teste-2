@@ -2,10 +2,10 @@ import { useMutation, useQueryClient } from "@tanstack/react-query";
 import axios from "axios";
 import { IFormRegistration } from "~/interfaces";
 
-const baseURL = 'http://localhost:3000/registrations'
+const baseURL = import.meta.env.VITE_BASE_URL
     
 const deleteRegistration = async(data: string) =>{
-    await axios.delete<IFormRegistration>(`${baseURL}/${data}`);
+    await axios.delete<IFormRegistration>(`${baseURL}/registrations/${data}`);
 }
   
 export function useDeleteMutate() {

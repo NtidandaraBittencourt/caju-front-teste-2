@@ -2,10 +2,10 @@ import { useMutation, useQueryClient } from "@tanstack/react-query";
 import axios from "axios";
 import { IFormRegistration } from "~/interfaces";
 
-const baseURL = 'http://localhost:3000/registrations'
+const baseURL = import.meta.env.VITE_BASE_URL
 
 const postRegistrations = async(data: IFormRegistration) => {
-    return await axios.post(baseURL, data)
+    return await axios.post(baseURL + '/registrations', data)
 }
 
 export function useRegistrationMutate(){

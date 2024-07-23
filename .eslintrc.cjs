@@ -16,6 +16,7 @@ module.exports = {
       node: {
         paths: ['src'],
         extensions: ['.js', '.jsx', '.ts', '.tsx'],
+        moduleDirectory: ['node_modules', 'src/'],
       },
     },
   },
@@ -29,6 +30,7 @@ module.exports = {
     "import/named": "off",
     "react-hooks/exhaustive-deps": "warn"
   },
+  parser: "@typescript-eslint/parser",
   parserOptions: {
     project: ['./tsconfig.json', './tsconfig.node.json']
   }

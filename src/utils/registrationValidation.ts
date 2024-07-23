@@ -12,7 +12,7 @@ const registrationValidationsScrema = Yup.object({
             return words.length >= 2;
         }),
     email: Yup.string().required("Preencha o e-mail").matches(/^([a-zA-Z0-9._%-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,})$/,"Preenche um e-mail válido"),
-    cpf: Yup.string().required("Prenche com um CPF válido").matches(/^\d{3}\.\d{3}\.\d{3}\-\d{2}$/, 'CPF inválido')
+    cpf: Yup.string().required("Prenche com um CPF válido").matches(/^\d{3}\.\d{3}\.\d{3}-\d{2}$/, 'CPF inválido')
 })
 
 export const registrationValidations = yupResolver(registrationValidationsScrema)
